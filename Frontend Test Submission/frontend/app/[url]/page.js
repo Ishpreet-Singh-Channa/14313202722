@@ -12,7 +12,7 @@ export default function Page() {
 
         const redirect = async () => {
             try {
-                const res = await fetch(`/api/urlShortner/${url}`, { method: "GET" });
+                const res = await fetch(`/api/shorturls/${url}`, { method: "GET" });
                 const body = await res.json();
                 router.push(body.url);
             } catch (error) {

@@ -7,7 +7,7 @@ export default function Home() {
     const [shortUrl, setShortUrl] = useState("");
     const handleSubmit = async () => {
         if (url.length === 0) return setErrorMessage("Enter a valid Url");
-        const res = await fetch("/api/urlShortner", { method: "POST", body: JSON.stringify({ url: url }) });
+        const res = await fetch("/api/shorturls", { method: "POST", body: JSON.stringify({ url: url }) });
         if (res.status !== 200) return setErrorMessage("Error in processing request");
         setErrorMessage("");
         const body = await res.json();
