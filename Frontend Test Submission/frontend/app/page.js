@@ -1,18 +1,32 @@
 "use client";
-import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
-    const click = async () => {
-        const res = await fetch("/api/urlShortner", { method: "POST", body: JSON.stringify({ url: "Ishpreet" }) });
-    };
-    const clickGet = async () => {
-        const res = await fetch("/api/urlShortner", { method: "GET" });
-        console.log("Status: ", res.status);
+    const [url, setUrl] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [shortUrl, setShortUrl] = useState("");
+    const handleSubmit = async () => {
+        if (url.length === 0) return setErrorMessage("Enter a valid Url");
+        const res = await fetch("/api/urlShortner", { method: "POST", body: JSON.stringify({ url: url }) });
+        if (res.status !== 200) return setErrorMessage("Error in processing request");
+        setErrorMessage("");
+        const body = await res.json();
+        setShortUrl("Short URL: " + body.url);
     };
     return (
-        <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-            <button onClick={() => click()}>click me</button>
-            <button onClick={() => clickGet()}>\adsfakfaofnoa</button>
+        <div className="flex flex-col ">
+            <input
+                type="text"
+                value={url}
+                placeholder="Enter Url"
+                onChange={(e) => {
+                    setErrorMessage("");
+                    setUrl(e.target.value);
+                }}
+            />
+            <p className="text-red">{errorMessage}</p>
+            <button onClick={() => handleSubmit()}>Submit</button>
+            <p>{shortUrl}</p>
         </div>
     );
 }
